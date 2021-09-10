@@ -1,0 +1,25 @@
+
+# - name: print to stdout
+#   command: echo "{{ testvar }}"
+#   register: hello
+
+# - debug: msg="{{ hello.stdout }}"
+
+- debug: msg=" Please check the parameter in /home/ec2-user/terraform/aws-cicd-iac/ecs-task/terraform.tfvar file before running the playbook"
+
+- name: select workspace
+  shell: "terraform workspace select {{ workspace }}"
+  args:
+    chdir: /home/ec2-user/terraform/aws-cicd-iac/ecs-task
+
+- name: terraform init and plan
+  shell: "terraform init && terraform plan"
+  args:
+    chdir: /home/ec2-user/terraform/aws-cicd-iac/ecs-task
+
+- name: run the terraform task 
+  shell: "terraform apply -auto-approve"
+  args:
+    chdir: /home/ec2-user/terraform/aws-cicd-iac/ecs-task
+
+- debug: msg="Please check alb & ecstask resource in AWS console"

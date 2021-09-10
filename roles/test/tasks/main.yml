@@ -1,0 +1,11 @@
+- name: print to stdout
+  command: echo "{{ testvar }}"
+  register: hello
+
+- debug: msg="{{ hello.stdout }}"
+
+- name: print to pwd
+  command: pwd
+  register: pwd
+
+- debug: msg="{{ pwd.stdout }}"

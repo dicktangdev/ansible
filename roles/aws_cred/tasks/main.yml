@@ -1,0 +1,32 @@
+
+# - name: print to stdout
+#   command: echo "{{ testvar }}"
+#   register: hello
+
+# - debug: msg="{{ hello.stdout }}"
+
+- name: Creating a file with content
+  copy:
+    dest: "/home/ec2-user/.aws/testfile"
+    content: |
+      [default]
+      aws_access_key_id = {{ qa_access_key }}
+      aws_secret_access_key = {{ qa_secret_key }}
+      
+      [qa]
+      aws_access_key_id = {{ qa_access_key }}
+      aws_secret_access_key = {{ qa_secret_key }}
+      
+      [prod]
+      aws_access_key_id = {{ prod_access_key }}
+      aws_secret_access_key = {{ prod_secret_key }}
+
+- name: backup file if exists
+  shell: "[ ! -f credentials ] || mv credentials credentials_bp"
+  args:
+    chdir: /home/ec2-user/.aws/
+
+- name: make new credentials file
+  shell: "mv -i testfile credentials"
+  args:
+    chdir: /home/ec2-user/.aws/

@@ -1,0 +1,25 @@
+
+# - name: print to stdout
+#   command: echo "{{ testvar }}"
+#   register: hello
+
+# - debug: msg="{{ hello.stdout }}"
+
+- debug: msg=" Please check the parameter in /home/ec2-user/terraform/aws-cicd-iac/ecr/terraform.tfvar file before creating the ecr"
+
+- name: select workspace
+  shell: "terraform workspace select qa"
+  args:
+    chdir: /home/ec2-user/terraform/aws-cicd-iac/ecr
+
+- name: terraform init and plan
+  shell: "terraform init && terraform plan"
+  args:
+    chdir: /home/ec2-user/terraform/aws-cicd-iac/ecr
+
+- name: run the terraform task to create ecr 
+  shell: "terraform apply -auto-approve"
+  args:
+    chdir: /home/ec2-user/terraform/aws-cicd-iac/ecr
+
+- debug: msg="Please check ecr & codecommit resource in AWS console"

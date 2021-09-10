@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  vars_files:
+    - ./vars/global.yml
+  connection: local
+  gather_facts: no
+  roles:
+      - {role: 'test', tags: 'testtag'}
+      - {role: 'aws_cred', tags: 'cred'}
+      - {role: 'ecr', tags: 'ecr'}
+      - {role: 'ecs-task', tags: 'ecstask'}
+      - {role: 'qa-cross-account', tags: 'qacrossacc'}
+      - {role: 'prod-cross-account', tags: 'prodcrossacc'}
